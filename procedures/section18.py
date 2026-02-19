@@ -44,11 +44,11 @@ from .common import PointResult, mean, stdev, within, prompt
 
 @dataclass
 class ProcCfg:
-    settle_s: float = 1.0
-    nplc_3458: float = 10
-    samples_per_point: int = 5
-    sample_delay_s: float = 0.2
-    use_5720a_as_voltage_source: bool = False
+    settle_s: float
+    nplc_3458: float
+    samples_per_point: int
+    sample_delay_s: float
+    use_5720a_as_voltage_source: bool
 
 def _sample_readings(read_fn, n: int, delay_s: float) -> list[float]:
     xs=[]

@@ -58,11 +58,11 @@ def main():
     inst=cfg["instruments"]
     meas=cfg.get("measurement",{})
     proc_cfg=ProcCfg(
-        settle_s=float(meas.get("settle_s",1.0)),
-        nplc_3458=float(meas.get("nplc_3458",10)),
-        samples_per_point=int(meas.get("samples_per_point",5)),
-        sample_delay_s=float(meas.get("sample_delay_s",0.2)),
-        use_5720a_as_voltage_source=bool(cfg.get("use_5720a_as_voltage_source", False)),
+        settle_s=float(meas.get("settle_s")),
+        nplc_3458=float(meas.get("nplc_3458")),
+        samples_per_point=int(meas.get("samples_per_point")),
+        sample_delay_s=float(meas.get("sample_delay_s")),
+        use_5720a_as_voltage_source=bool(cfg.get("use_5720a_as_voltage_source")),
     )
 
     r5156_actual = cfg.get("standards_5156_actual_ohm", {})
