@@ -1,0 +1,36 @@
+visa_backend: "@py"   # "@py" (pyvisa-py) or "" (NI-VISA)
+timeout_ms: 15000
+
+instruments:
+  k6430:
+    resource: "GPIB0::25::INSTR"
+  hp3458a:
+    resource: "GPIB0::23::INSTR"
+  fluke5720a:
+    resource: "GPIB0::4::INSTR"
+
+# Настройки измерений (можно менять под свою методику)
+measurement:
+  settle_s: 5.0
+  nplc_3458: 10
+  samples_per_point: 5
+  sample_delay_s: 0.2
+
+# Если хотите в некоторых проверках использовать 5720A как источник напряжения
+# (например, для проверки измерения V/Ohm), включите:
+use_5720a_as_voltage_source: false
+
+# Номиналы мер напряжения (ручная коммутация) — используются там, где удобно
+voltage_standards:
+  - { name: "1V", value_v: 1.0 }
+  - { name: "10V", value_v: 10.0 }
+
+
+# ДЕЙСТВИТЕЛЬНЫЕ (characterized) значения сопротивлений Fluke 5156A (Вариант A)
+# Используются в расчёте I = V/R для Table 18-11 и 18-13.
+# Если ключ отсутствует — будет использован номинал из таблицы.
+standards_5156_actual_ohm:
+  100M: 100.000000e6
+  1G:   1.000000e9
+  10G:  10.000000e9
+  100G: 100.000000e9
