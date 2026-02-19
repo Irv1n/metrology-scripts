@@ -1,4 +1,19 @@
 from __future__ import annotations
+
+"""drivers.k6430
+
+Драйвер Keithley 6430 (SMU) для задач раздела 18.
+
+Реализует минимальный набор команд:
+- reset(), idn()
+- output(on/off)
+- source_v(), source_i()
+- измерение read() (парсит первую величину из ответа :READ?)
+
+Примечание: 6430 по :READ? часто возвращает несколько полей через запятую.
+Драйвер берёт первое поле как основное измеренное значение.
+"""
+
 from dataclasses import dataclass
 from typing import Literal, Optional
 from .visa_base import VisaInstrument, VisaConfig

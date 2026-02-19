@@ -1,4 +1,19 @@
 from __future__ import annotations
+
+"""procedures.section18
+
+Реализация процедур верификации по разделу 18.
+
+Содержит:
+- ProcCfg: параметры измерений (NPLC, задержки, число отсчётов)
+- _sample_readings(): снятие серии измерений
+- shift_limits(): алгоритм "closest value" (сдвиг лимитов)
+- verify_*(): функции, соответствующие таблицам раздела 18
+
+Функции verify_* выводят оператору подсказки по подключению и выполняют измерения.
+Результат каждой точки записывается как PointResult (см. procedures.common).
+"""
+
 from dataclasses import dataclass
 from typing import List, Optional, Dict, Any
 import time
@@ -78,8 +93,9 @@ def verify_mainframe_output_voltage(k: K6430, dmm: HP3458A, cfg: ProcCfg) -> Lis
             dut_stdev=float("nan"),
             low=lo, high=hi, unit=row.unit, pass_fail=passfail
         ))
-    return results
     k.output(False)
+    return results
+    
 
 def verify_mainframe_measure_voltage(k: K6430, dmm: HP3458A, src: Optional[Fluke5720A], cfg: ProcCfg) -> List[PointResult]:
     prompt("MAINFRAME voltage measurement accuracy (Table 18-4):\n"
@@ -109,10 +125,8 @@ def verify_mainframe_measure_voltage(k: K6430, dmm: HP3458A, src: Optional[Fluke
             k.sense_func("VOLT")
             time.sleep(cfg.settle_s)
             xs=_sample_readings(dmm.read, cfg.samples_per_point, cfg.sample_delay_s)
-            print(xs)
             actual=mean(xs)
             dut=_sample_readings(k.read, cfg.samples_per_point, cfg.sample_delay_s)
-            print(dut)
             dut_m=mean(dut)
             lo,hi=shift_limits(row.set_value,row.low,row.high,actual)
 
@@ -130,8 +144,8 @@ def verify_mainframe_measure_voltage(k: K6430, dmm: HP3458A, src: Optional[Fluke
         ))
     if cfg.use_5720a_as_voltage_source and src is not None:
         src.standby()
-    return results
     k.output(False)
+    return results
     
 def verify_mainframe_output_current(k: K6430, dmm: HP3458A, cfg: ProcCfg) -> List[PointResult]:
     prompt("MAINFRAME output current accuracy (Table 18-5):\n"
@@ -187,6 +201,7 @@ def verify_mainframe_measure_current(k: K6430, dmm: HP3458A, cfg: ProcCfg) -> Li
             dut_mean=dut_m, dut_stdev=stdev(dut),
             low=lo, high=hi, unit=row.unit, pass_fail=passfail
         ))
+    k.output(False)
     return results
 
 def verify_remote_preamp_low_current_measurement(k: K6430, dmm: HP3458A, cfg: ProcCfg, r5156_actual: Dict[str, float] | None = None) -> List[PointResult]:
@@ -230,6 +245,7 @@ def verify_remote_preamp_low_current_measurement(k: K6430, dmm: HP3458A, cfg: Pr
             dut_mean=dut_m, dut_stdev=stdev(dut),
             low=lo, high=hi, unit="A", pass_fail=passfail
         ))
+    k.output(False)
     return results
 
 def verify_remote_preamp_low_current_output(k: K6430, dmm: HP3458A, cfg: ProcCfg, r5156_actual: Dict[str, float] | None = None) -> List[PointResult]:
@@ -266,4 +282,5 @@ def verify_remote_preamp_low_current_output(k: K6430, dmm: HP3458A, cfg: ProcCfg
             dut_mean=float("nan"), dut_stdev=float("nan"),
             low=lo, high=hi, unit="A", pass_fail=passfail
         ))
+    k.output(False)
     return results

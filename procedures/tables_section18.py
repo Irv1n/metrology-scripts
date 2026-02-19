@@ -1,4 +1,23 @@
 from __future__ import annotations
+
+"""procedures.tables_section18
+
+Все таблицы раздела 18 записаны в виде структур данных (dataclass/списки).
+
+Зачем:
+- Процедуры (section18.py) не должны содержать "магические числа".
+- Таблицы легко проверять/редактировать и переносить между версиями.
+
+Каждая таблица содержит:
+- range_name (строка)
+- set_value (номинал точки)
+- low/high (пределы допуска из мануала)
+- unit
+
+Для low-current таблиц присутствует номинальное сопротивление R_nom.
+Действительное сопротивление R_act берётся из YAML и логируется отдельно.
+"""
+
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
 

@@ -1,4 +1,17 @@
 from __future__ import annotations
+
+"""drivers.fluke5720a
+
+Драйвер Fluke 5720A (калибратор/источник).
+
+В проекте используется как источник напряжения (когда use_5720a_as_voltage_source=true):
+- reset(), idn()
+- standby()
+- set_dcv(volts), oper() (если реализовано в файле)
+
+Команды соответствуют справочнику Remote Programming Reference Guide.
+"""
+
 from dataclasses import dataclass
 from typing import Optional
 from .visa_base import VisaInstrument, VisaConfig

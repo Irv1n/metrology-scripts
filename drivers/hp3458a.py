@@ -1,5 +1,19 @@
 from __future__ import annotations
 
+"""drivers.hp3458a
+
+Драйвер HP/Agilent 3458A (эталонный DMM).
+
+Ключевая особенность: 3458A плохо совместим с SCPI-командой READ? на части конфигураций.
+Поэтому драйвер работает в стиле "как на примере":
+
+- конфигурация: PRESET NORM, DCV/DCI, NDIG 8, RANGE, NPLC, AZERO, HIZ
+- измерение: TRIG SGL -> read() -> парсинг числа
+
+Также реализован автоподбор фиксированных диапазонов DCV/DCI (минимально достаточный).
+"""
+
+
 from dataclasses import dataclass
 from typing import Optional
 import re
